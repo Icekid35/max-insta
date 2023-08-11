@@ -133,6 +133,9 @@ app.get("/work", async (req, res) => {
   res.json(data);
 });
 
+app.get("/", (req, res) => {
+  res.json({"active":true});
+});
 app.get("/data", (req, res) => {
   res.json(json);
 });
