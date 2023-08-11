@@ -1,11 +1,13 @@
 const express = require("express");
 const axios = require("axios");
+var cron = require('node-cron');
 const app = express();
 const json = require("./dataset.json");
 const { IgApiClient } = require("instagram-private-api");
 const types = [{}];
 let videos = [];
 let images = [];
+
 
 const shuffle = (array) =>
   [...Array(array.length)]
@@ -125,9 +127,12 @@ async function startWork() {
   } catch (err) {
     console.log("an error occured with details ...", err);
   }
+  console.log('job done')
   return "done ";
 }
 
+const cronExpression = '0 */3 * * *';
+cron.schedule(cronExpression, startwork);
 app.get("/work", async (req, res) => {
   let data = await startWork();
   res.json(data);
@@ -150,3 +155,5 @@ const port = process.env.port || 3000;
 app.listen(port, () => {
   console.log(" app is listening on port " + port);
 });
+
+
