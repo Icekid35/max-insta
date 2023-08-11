@@ -132,7 +132,7 @@ async function startWork() {
 }
 
 const cronExpression = '0 */3 * * *';
-cron.schedule(cronExpression, startwork);
+cron.schedule(cronExpression, startWork);
 app.get("/work", async (req, res) => {
   let data = await startWork();
   res.json(data);
