@@ -14,7 +14,7 @@ const shuffle = (array) =>
 
 const ig = new IgApiClient();
 ig.state.generateDevice("javascriptpro1");
-const auth = await ig.account.login("javascriptpro1", "icekid@love");
+ig.account.login("javascriptpro1", "icekid@love");
 
 function organiseData() {
   json.map((data) => {
