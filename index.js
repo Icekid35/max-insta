@@ -7,6 +7,9 @@ const { IgApiClient } = require("instagram-private-api");
 const types = [{}];
 let videos = [];
 let images = [];
+const ig = new IgApiClient();
+ig.state.generateDevice("javascriptpro1");
+ig.account.login("javascriptpro1", "icekid@love");
 
 
 const shuffle = (array) =>
@@ -76,8 +79,8 @@ async function convertUrlToBuffer(url) {
     const response = await axios.get(url, { responseType: "arraybuffer" });
     return Buffer.from(response.data);
   } catch (error) {
-    console.error("Error converting URL to buffer:", error);
-    throw error;
+    console.error("Error converting URL to buffer:", error.code);
+    // throw error;
   }
 }
 
@@ -85,18 +88,17 @@ async function startWork() {
   try {
     //my logic here
 
-const ig = new IgApiClient();
-ig.state.generateDevice("javascriptpro1");
-ig.account.login("javascriptpro1", "icekid@love");
 
-    if ((last = 1)) {
+    if ((last == 1)) {
       postType = "Video";
     } else {
       postType = "Image";
     }
 
     if (postType == "Video") {
-      const randomIndex = Math.round(Math.random() * (videos.length - 1));
+      try{
+        console.log("posting video...")
+        const randomIndex = Math.round(Math.random() * (videos.length - 1));
       const { video, coverImage } = videos[randomIndex];
       const videoBuffer = await convertUrlToBuffer(video);
       const coverImageBuffer = await convertUrlToBuffer(coverImage);
@@ -111,21 +113,33 @@ ig.account.login("javascriptpro1", "icekid@love");
       console.log(publishResult);
       last = 0;
       videos.splice(randomIndex, 1);
+    }catch(err){
+      last = 0;
+      startWork()
+
+    }
     } else if (postType == "Image") {
-      const randomIndex = Math.round(Math.random() * (images.length - 1));
-      const file = convertUrlToBuffer(images[randomIndex]);
-      const publishResult = await ig.publish.photo({
-        file,
-        // file: await readFileAsync(path),
-        caption,
-      });
+      try{
+
+        console.log("posting image...")
+        
+        const randomIndex = Math.round(Math.random() * (images.length - 1));
+        const file = await convertUrlToBuffer(images[randomIndex]);
+        const publishResult = await ig.publish.photo({
+          file,
+          // file: await readFileAsync(path),
+          caption,
+        });
 
       console.log(publishResult);
       last = 1;
       images.splice(randomIndex, 1);
+    }catch(err){
+      console.log("error encountered while posting images"+ err.code)
+    }
     }
   } catch (err) {
-    console.log("an error occured with details ...", err);
+    console.log("an error occured with details ...", err.code);
   }
   console.log('job done')
   return "done ";
