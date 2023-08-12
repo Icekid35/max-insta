@@ -14,10 +14,6 @@ const shuffle = (array) =>
     .map((el, i) => Math.floor(Math.random() * i))
     .reduce((a, rv, i) => ([a[i], a[rv]] = [a[rv], a[i]]) && a, array);
 
-const ig = new IgApiClient();
-ig.state.generateDevice("javascriptpro1");
-ig.account.login("javascriptpro1", "icekid@love");
-
 function organiseData() {
   json.map((data) => {
     let { type } = data;
@@ -88,6 +84,10 @@ async function convertUrlToBuffer(url) {
 async function startWork() {
   try {
     //my logic here
+
+const ig = new IgApiClient();
+ig.state.generateDevice("javascriptpro1");
+ig.account.login("javascriptpro1", "icekid@love");
 
     if ((last = 1)) {
       postType = "Video";
