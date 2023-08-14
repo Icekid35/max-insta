@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index"
+    "start": "node scraper.js && node index"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +18,7 @@
     "axios": "^1.4.0",
     "express": "^4.18.2",
     "instagram-private-api": "^1.45.3",
+    "mongoose": "^7.4.3",
     "node-cron": "^3.0.2"
   }
 }
