@@ -128,7 +128,7 @@ function organiseData() {
     switch (type) {
       case "Video":
         videos.push({
-          video: data.videoUrl,
+          videoFile: data.videoUrl,
           coverImage: data.displayUrl,
         });
         break;
