@@ -10,36 +10,41 @@ let videos = [];
 let videoSchema
 
 let videoModel
+console.log("loging in...")
 const ig = new IgApiClient();
 ig.state.generateDevice("javascriptpro1");
 ig.account.login("javascriptpro1", "icekid@love");
 
 mongodburi =
   "mongodb+srv://icekid35:6BFiHbTsSjavcWdg@cluster0.awcnqku.mongodb.net/?retryWrites=true&w=majority";
+  console.log("connecting to database...")
 
 // Set up Mongoose and connect to your MongoDB instance
 mongoose.connect(mongodburi, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-mongoose.connection.on("connected", () => {
+mongoose.connection.on("connected",async() => {
   console.log("Mongoose connected to MongoDB");
+  videoSchema = new mongoose.Schema({
+    videoBuffer: Buffer,
+    imageBuffer: Buffer,
+  });
+  
+  // Create a Mongoose model for the videos
+   videoModel = mongoose.model("video", videoSchema);
+  console.log("created schema...")
+  
+    let vm = await videoModel.find().exec();
+    videos = Array.from(vm);
+    console.log("loaded videos...")
+    console.log(videos)
+
 });
 mongoose.connection.on("error", () => {
   console.log("error connecting to MongoDB");
   // Define a schema for the videos
- videoSchema = new mongoose.Schema({
-  videoBuffer: Buffer,
-  imageBuffer: Buffer,
-});
-
-// Create a Mongoose model for the videos
- videoModel = mongoose.model("video", videoSchema);
-
-(async () => {
-  let vm = await videoModel.find().exec();
-  videos = Array.from(vm);
-})();
+ 
 });
 mongoose.connection.on("close", () => {
   console.log("closed connection to MongoDB");
