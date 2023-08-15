@@ -7,6 +7,9 @@ const { IgApiClient } = require("instagram-private-api");
 
 let videos = [];
 
+let videoSchema
+
+let videoModel
 const ig = new IgApiClient();
 ig.state.generateDevice("javascriptpro1");
 ig.account.login("javascriptpro1", "icekid@love");
@@ -24,21 +27,25 @@ mongoose.connection.on("connected", () => {
 });
 mongoose.connection.on("error", () => {
   console.log("error connecting to MongoDB");
-});
-
-// Define a schema for the videos
-const videoSchema = new mongoose.Schema({
+  // Define a schema for the videos
+ videoSchema = new mongoose.Schema({
   videoBuffer: Buffer,
   imageBuffer: Buffer,
 });
 
 // Create a Mongoose model for the videos
-const videoModel = mongoose.model("video", videoSchema);
+ videoModel = mongoose.model("video", videoSchema);
 
 (async () => {
   let vm = await videoModel.find().exec();
   videos = Array.from(vm);
 })();
+});
+mongoose.connection.on("close", () => {
+  console.log("closed connection to MongoDB");
+});
+
+
 
 const caption =
   " follow @javascriptpro1 for more \n\n\n#program #coding #code #programmingmemes #css #webdev #codingmemes #programmer #java #python #javascript #html #memecoding #cs #computers #cpp #csharp #developer #nerd #math #apple #windows #programmerhumor #programminghumor #codinglife #stackoverflow #devhumor #dev #tech";
