@@ -49,7 +49,7 @@ async function startWork() {
 
     console.log("posting video...");
     const randomIndex = Math.round(Math.random() * (videos.length - 1));
-    const { videoBuffer, imageBuffer } = videos[randomIndex];
+    const { videoBuffer, imageBuffer,_id } = videos[randomIndex];
     // const videoBuffer = await convertUrlToBuffer(video);
     // const coverImageBuffer = await convertUrlToBuffer(coverImage);
     const publishResult = await ig.publish.video({
@@ -63,6 +63,13 @@ async function startWork() {
     console.log(publishResult);
     last = 0;
     videos.splice(randomIndex, 1);
+    const deletedImage = await videoModel.findByIdAndDelete(_id);
+
+    if (!deletedImage) {
+      console.log(`Image with ID ${_id} not found.`);
+    } else {
+      console.log(`Image with ID ${_id} deleted successfully.`);
+    }
   } catch (err) {
     console.log("an error occured with details ...", err.code);
   }
