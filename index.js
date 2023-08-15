@@ -35,7 +35,7 @@ mongoose.connection.on("connected",async() => {
    videoModel = mongoose.model("video", videoSchema);
   console.log("created schema...")
   
-    let vm = await videoModel.find().exec();
+    let vm = await videoModel.find().limit(10).exec();
     videos = Array.from(vm);
     console.log("loaded videos...")
     console.log(videos)
@@ -58,7 +58,12 @@ const caption =
 async function startWork() {
   try {
     //my logic here
-
+if (videos.length < 1){
+  let vm = await videoModel.find().limit(10).exec();
+  videos = Array.from(vm);
+  console.log("loaded videos...")
+  console.log(videos)
+}
     console.log("posting video...");
     const randomIndex = Math.round(Math.random() * (videos.length - 1));
     const { videoBuffer, imageBuffer,_id } = videos[randomIndex];
